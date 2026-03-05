@@ -64,6 +64,32 @@ public class WorkOrderService {
         WorkOrder wo = workOrderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ordem de Serviço não encontrada!"));
 
+
+        // Verifica se a OS já está fechada no banco
+        boolean isAlreadyClosed = (wo.getStatus() == OrderStatus.ENTREGUE);
+
+        // Verifica se o usuário está tentando mudar o status para reabrir
+        boolean isReopening = isAlreadyClosed && request.getStatus() != null && request.getStatus() != wo.getStatus();
+
+        // REGRA 1: Se tá fechada e NÃO é uma reabertura, bloqueia tudo!
+        if (isAlreadyClosed && !isReopening) {
+            throw new IllegalStateException("Uma Ordem de Serviço encerrada não pode ser alterada!");
+        }
+
+        // REGRA 2: Se está reabrindo, exige a justificativa
+        if (isReopening) {
+            if (request.getJustification() == null || request.getJustification().trim().isEmpty()) {
+                throw new IllegalArgumentException("É obrigatório informar uma justificativa para reabrir a OS.");
+            }
+            // Anota a justificativa no histórico da OS
+            String historico = wo.getNotes() != null ? wo.getNotes() : "";
+            wo.setNotes(historico + "\n\n[REABERTA] Motivo: " + request.getJustification());
+            wo.setStatus(request.getStatus());
+
+            // Retorna logo após reabrir, para obrigar o usuário a editar as peças num segundo momento
+            return workOrderRepository.save(wo);
+        }
+
         // Atualiza Status e Observações Internas
         if (request.getStatus() != null) wo.setStatus(request.getStatus());
         if (request.getNotes() != null) wo.setNotes(request.getNotes());

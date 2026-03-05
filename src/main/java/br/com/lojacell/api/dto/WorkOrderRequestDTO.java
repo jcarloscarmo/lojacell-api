@@ -17,6 +17,7 @@ public class WorkOrderRequestDTO {
     private String complaint;
     private OrderStatus status;
     private String notes;
+    private String justification;
 
     // NOVO: Recebendo as listas do Front-end
     private List<PartDTO> parts;
