@@ -11,13 +11,16 @@ public class WorkOrderRequestDTO {
     private String customerName;
     private String customerPhone;
     private String serialNumber;
-    private BigDecimal serviceTotal;
+    //private BigDecimal serviceTotal;
     private String brandName;
     private String modelName;
     private String complaint;
     private OrderStatus status;
     private String notes;
     private String justification;
+
+    private String devicePhoto;
+    private String customerSignature;
 
     // NOVO: Recebendo as listas do Front-end
     private List<PartDTO> parts;

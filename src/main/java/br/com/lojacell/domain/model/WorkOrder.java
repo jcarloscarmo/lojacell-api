@@ -64,6 +64,12 @@ public class WorkOrder {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "device_photo", columnDefinition = "LONGTEXT")
+    private String devicePhoto;
+
+    @Column(name = "customer_signature", columnDefinition = "LONGTEXT")
+    private String customerSignature;
+
     // Métodos auxiliares para manter as tabelas sincronizadas
     public void addUsedPart(UsedPart part) {
         usedParts.add(part);
