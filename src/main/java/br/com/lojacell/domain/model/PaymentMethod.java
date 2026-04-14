@@ -1,10 +1,9 @@
 package br.com.lojacell.domain.model;
 
 public enum PaymentMethod {
+    CASH,
     PIX,
-    DINHEIRO,
-    DEBITO,
-    CREDITO,
-    DESCONTO,
-    OUTROS
+    CREDIT_CARD,
+    DEBIT_CARD,
+    OTHER
 }
